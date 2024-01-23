@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CycleStats</string>
+    <string name="start_button">Start Cycling</string>
+</resources>
