@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">CycleStats</string>
     <string name="start_button">Start Cycling</string>
+    <string name="stop_button">Stop Cycling</string>
+    <string name="run_time_text">Hello world</string>
+    <string name="start_cycling">Start Cycling!</string>
+    <string name="stop_cycling">Stop Cycling!</string>
 </resources>
