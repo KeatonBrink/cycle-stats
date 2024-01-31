@@ -35,6 +35,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/run_time_text" />
+
+        <Button
+            android:id="@+id/debug_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Debug"
+            android:layout_gravity="center_horizontal"
+            />
     </LinearLayout>
 
 </LinearLayout>
