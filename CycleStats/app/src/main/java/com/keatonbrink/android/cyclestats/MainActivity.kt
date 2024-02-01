@@ -1,6 +1,7 @@
 package com.keatonbrink.android.cyclestats
 
 import android.location.Location
+import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +9,11 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -24,10 +30,16 @@ class MainActivity : AppCompatActivity() {
     private val logIntervalMinnis = Constants.LOG_INTERVAL_MILLIS
     private val trips: MutableList<TripData> = mutableListOf<TripData>()
 
+    // Location Pings
+    private lateinit var locationRequest: LocationRequest;
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        locationRequest = LocationRequest.Builder(logIntervalMinnis).setQuality(LocationRequest.QUALITY_BALANCED_POWER_ACCURACY).build()
 
 
         // Currently using only one button that alternates functionality on press
@@ -113,5 +125,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopLogging() {
         trackingEnabled = false
+    }
+
+    private fun updateGPS()  {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == )
     }
 }
