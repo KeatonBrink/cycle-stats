@@ -1,5 +1,9 @@
 package com.keatonbrink.android.cyclestats
 
+import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
 import com.google.android.gms.location.LocationServices
@@ -47,6 +52,8 @@ class MainActivity : AppCompatActivity() {
         binding.toggleCycleButton.setOnClickListener{ _: View ->
             runStatus.isCycling = !runStatus.isCycling
             if (runStatus.isCycling) {
+                getPermssionsIfNeeded()
+
                 // Toast to the start of cycling
                 Toast.makeText(this, R.string.start_cycling, Toast.LENGTH_LONG).show()
 
@@ -131,5 +138,21 @@ class MainActivity : AppCompatActivity() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == )
+    }
+
+    private fun getPermssionsIfNeeded() {
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            getPermission(ACCESS_FINE_LOCATION)
+        }
+        if (ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            getPermission(ACCESS_BACKGROUND_LOCATION)
+        }
+        if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            getPermission(ACCESS_COARSE_LOCATION)
+        }
+    }
+
+    private fun getPermission(appPermission: String) {
+        ActivityCompat.requestPermissions(this, arrayOf(appPermission), 200)
     }
 }
