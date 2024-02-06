@@ -92,12 +92,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.debugButton.setOnClickListener { _: View ->
+            var tripString = ""
             for ((i, trip) in trips.withIndex()) {
                 Log.i("TAG", "Trip " + i.toString() + " has a number of pings: " + trip.pings.size)
+                tripString += "Trip " + i.toString() + " has a number of pings: " + trip.pings.size + "\n"
+                tripString += trip.pings.toString() + "\n"
                 for (ping in trip.pings) {
                     Log.i("TAG", "Ping: " + ping.latitude.toString() + ", " + ping.longitude.toString())
                 }
             }
+            binding.tripData.text = tripString
         }
     }
 
@@ -131,6 +135,7 @@ class MainActivity : AppCompatActivity() {
             locationCallback,
             Looper.getMainLooper()
         )
+
     }
 
     private fun stopLogging() {
