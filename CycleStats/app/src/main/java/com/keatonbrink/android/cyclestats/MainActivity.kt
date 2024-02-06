@@ -4,11 +4,8 @@ import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationRequest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
@@ -16,7 +13,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
@@ -33,66 +32,61 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentTrip: TripData
     private var trackingEnabled = false
     private val logIntervalMinnis = Constants.LOG_INTERVAL_MILLIS
-    private val trips: MutableList<TripData> = mutableListOf<TripData>()
+    private val trips: MutableList<TripData> = mutableListOf()
+    private val requestCode = 200
 
     // Location Pings
-    private lateinit var locationRequest: LocationRequest;
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient;
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        locationRequest = LocationRequest.Builder(logIntervalMinnis).setQuality(LocationRequest.QUALITY_BALANCED_POWER_ACCURACY).build()
+        locationRequest = LocationRequest.Builder(logIntervalMinnis).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build()
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Currently using only one button that alternates functionality on press
-        // I should probably reconsider this setup
-        binding.toggleCycleButton.setOnClickListener{ _: View ->
+        binding.toggleCycleButton.setOnClickListener { _: View ->
             runStatus.isCycling = !runStatus.isCycling
             if (runStatus.isCycling) {
                 getPermissionsIfNeeded()
 
-                // Toast to the start of cycling
+                if (isPermissionDenied()) {
+                    runStatus.isCycling = !runStatus.isCycling
+                    return@setOnClickListener
+                }
+
                 Toast.makeText(this, R.string.start_cycling, Toast.LENGTH_LONG).show()
 
-                // Handle initial button/screen changes
                 runStatus.statusTextID = R.string.stop_button
                 runStatus.startTimeString = getCurrentTimeString()
                 runStatus.startTimeSeconds = System.currentTimeMillis() / 1000
                 binding.toggleCycleButton.setText(runStatus.statusTextID)
                 binding.runTime.text = runStatus.startTimeString
 
-                // Handle the in-memory current trip setup
                 currentTrip = TripData(
                     getCurrentTimeString(),
                     Calendar.getInstance(),
                     System.currentTimeMillis() / 1000,
-                    mutableListOf<Location>()
+                    mutableListOf()
                 )
-                currentTrip.pings.add(harvestData())
 
-                // Start logging data as callback
                 startLogging()
             } else {
-                // Toast to the end of cycling
                 Toast.makeText(this, R.string.stop_cycling, Toast.LENGTH_LONG).show()
 
-                // Handle end of cycle button/screen changes
-                // Also clearing out the cycle data, not necessary
                 runStatus.statusTextID = R.string.start_button
                 runStatus.startTimeString = ""
                 runStatus.startTimeSeconds = 0
                 binding.toggleCycleButton.setText(runStatus.statusTextID)
                 binding.runTime.text = ""
 
-                // Stop logging data as callback
                 stopLogging()
 
-                // Add last ping to current trip
-                currentTrip.pings.add(harvestData())
-                // Add current trip to list of trips
                 trips.add(currentTrip)
             }
         }
@@ -100,6 +94,9 @@ class MainActivity : AppCompatActivity() {
         binding.debugButton.setOnClickListener { _: View ->
             for ((i, trip) in trips.withIndex()) {
                 Log.i("TAG", "Trip " + i.toString() + " has a number of pings: " + trip.pings.size)
+                for (ping in trip.pings) {
+                    Log.i("TAG", "Ping: " + ping.latitude.toString() + ", " + ping.longitude.toString())
+                }
             }
         }
     }
@@ -111,48 +108,54 @@ class MainActivity : AppCompatActivity() {
 
     private fun startLogging() {
         trackingEnabled = true
-        Handler(Looper.getMainLooper()).postDelayed({
-            logRunnable()
-        }, logIntervalMinnis)
-    }
-
-    private fun logRunnable() {
-        if (trackingEnabled) {
-            currentTrip.pings.add(harvestData())
-            Log.i("TAG", "Data can be captured here" + getCurrentTimeString())
-            Handler(Looper.getMainLooper()).postDelayed({
-                logRunnable()
-            }, logIntervalMinnis)
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                p0.lastLocation?.let { location ->
+                    currentTrip.pings.add(location)
+                }
+            }
         }
-    }
 
-    private fun harvestData(): Location {
-        return Location("dummyLocation")
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
     }
 
     private fun stopLogging() {
         trackingEnabled = false
-    }
-
-    private fun updateGPS()  {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == )
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     private fun getPermissionsIfNeeded() {
-        var appPermissions = arrayOf<String>()
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            appPermissions += ACCESS_FINE_LOCATION
-        }
-        if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            appPermissions += ACCESS_COARSE_LOCATION
+            getPermission(ACCESS_FINE_LOCATION)
         }
         if (ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            appPermissions += ACCESS_BACKGROUND_LOCATION
+            getPermission(ACCESS_BACKGROUND_LOCATION)
         }
-        if (appPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, appPermissions, 200)
+        if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            getPermission(ACCESS_COARSE_LOCATION)
         }
     }
+
+    private fun getPermission(appPermission: String) {
+        ActivityCompat.requestPermissions(this, arrayOf(appPermission), requestCode)
+    }
+
+    private fun isPermissionDenied(): Boolean {
+        return ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED
+    }
+
 }
