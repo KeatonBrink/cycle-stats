@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         binding.toggleCycleButton.setOnClickListener{ _: View ->
             runStatus.isCycling = !runStatus.isCycling
             if (runStatus.isCycling) {
-                getPermssionsIfNeeded()
+                getPermissionsIfNeeded()
 
                 // Toast to the start of cycling
                 Toast.makeText(this, R.string.start_cycling, Toast.LENGTH_LONG).show()
@@ -140,19 +140,19 @@ class MainActivity : AppCompatActivity() {
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == )
     }
 
-    private fun getPermssionsIfNeeded() {
+    private fun getPermissionsIfNeeded() {
+        var appPermissions = arrayOf<String>()
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            getPermission(ACCESS_FINE_LOCATION)
-        }
-        if (ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            getPermission(ACCESS_BACKGROUND_LOCATION)
+            appPermissions += ACCESS_FINE_LOCATION
         }
         if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            getPermission(ACCESS_COARSE_LOCATION)
+            appPermissions += ACCESS_COARSE_LOCATION
         }
-    }
-
-    private fun getPermission(appPermission: String) {
-        ActivityCompat.requestPermissions(this, arrayOf(appPermission), 200)
+        if (ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            appPermissions += ACCESS_BACKGROUND_LOCATION
+        }
+        if (appPermissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, appPermissions, 200)
+        }
     }
 }
