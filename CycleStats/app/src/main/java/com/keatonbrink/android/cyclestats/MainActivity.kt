@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(
                     POST_NOTIFICATIONS
                 ),
-                77
+                200
             )
         }
 
@@ -175,9 +175,6 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             getPermission(ACCESS_FINE_LOCATION)
         }
-        if (ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            getPermission(ACCESS_BACKGROUND_LOCATION)
-        }
         if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
             getPermission(ACCESS_COARSE_LOCATION)
         }
@@ -188,7 +185,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isPermissionDenied(): Boolean {
-        return ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED
+        return ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED
     }
 
 }
