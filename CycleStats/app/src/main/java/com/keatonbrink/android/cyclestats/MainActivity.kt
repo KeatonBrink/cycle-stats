@@ -3,7 +3,13 @@ package com.keatonbrink.android.cyclestats
 import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.POST_NOTIFICATIONS
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -46,6 +52,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    POST_NOTIFICATIONS
+                ),
+                77
+            )
+        }
+
         locationRequest = LocationRequest.Builder(logIntervalMinnis).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -59,6 +75,9 @@ class MainActivity : AppCompatActivity() {
                     runStatus.isCycling = !runStatus.isCycling
                     return@setOnClickListener
                 }
+
+                // log to the console that the user has started cycling
+                Log.i("TAG", "User has started cycling")
 
                 Toast.makeText(this, R.string.start_cycling, Toast.LENGTH_LONG).show()
 
@@ -75,6 +94,11 @@ class MainActivity : AppCompatActivity() {
                     mutableListOf()
                 )
 
+                Intent(applicationContext, CyclingService::class.java).also {
+                    it.action = CyclingService.Actions.START.name
+                    startService(it)
+                }
+
                 startLogging()
             } else {
                 Toast.makeText(this, R.string.stop_cycling, Toast.LENGTH_LONG).show()
@@ -88,6 +112,10 @@ class MainActivity : AppCompatActivity() {
                 stopLogging()
 
                 trips.add(currentTrip)
+                Intent(applicationContext, CyclingService::class.java).also {
+                    it.action = CyclingService.Actions.STOP.name
+                    startService(it)
+                }
             }
         }
 
