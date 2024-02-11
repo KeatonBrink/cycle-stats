@@ -19,11 +19,22 @@
     <androidx.fragment.app.FragmentContainerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container"
+    android:id="@+id/current_trip_fragment_container"
     android:name="com.keatonbrink.android.cyclestats.CurrentTripFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".MainActivity" />
+
+    <androidx.fragment.app.FragmentContainerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/trip_list_fragment_container"
+        android:name="com.keatonbrink.android.cyclestats.TripListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MainActivity" />
+
+
 
 
 </LinearLayout>

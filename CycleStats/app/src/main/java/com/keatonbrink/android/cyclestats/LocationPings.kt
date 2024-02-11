@@ -7,7 +7,7 @@ data class LocationPings(
 //    Primary key
     val id: UUID,
 //    Foreign key
-    val tripId: UUID,
+    var tripId: UUID,
     val latitude: Double,
     val longitude: Double,
     val altitude: Double,
