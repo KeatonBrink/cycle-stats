@@ -3,9 +3,14 @@ package com.keatonbrink.android.cyclestats
 import java.util.Calendar
 import java.util.UUID
 import androidx.lifecycle.ViewModel
+import java.util.Random
 
 class TripListViewModel: ViewModel() {
     private val trips: MutableList<TripData> = mutableListOf()
+
+    private val random = Random()
+
+
 
 //    Generate random trip data for testing
     init {
@@ -22,7 +27,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -31,7 +36,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -40,7 +45,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -49,7 +54,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -58,7 +63,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 )
             )
         )
@@ -79,7 +84,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -88,7 +93,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -97,7 +102,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 ),
                 LocationPings(
                     UUID.randomUUID(),
@@ -106,7 +111,7 @@ class TripListViewModel: ViewModel() {
                     -122.4194,
                     0.0,
                     0.0f,
-                    System.currentTimeMillis()
+                    System.currentTimeMillis() + random.nextInt(100000)
                 )
             )
         )

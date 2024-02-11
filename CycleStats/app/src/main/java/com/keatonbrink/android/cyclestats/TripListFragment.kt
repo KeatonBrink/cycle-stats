@@ -35,6 +35,10 @@ class TripListFragment: Fragment() {
 
         binding.tripsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+        val trips = tripListViewModel.getTrips()
+        val adapter = TripListAdapter(trips)
+        binding.tripsRecyclerView.adapter = adapter
+
         return binding.root
     }
 
