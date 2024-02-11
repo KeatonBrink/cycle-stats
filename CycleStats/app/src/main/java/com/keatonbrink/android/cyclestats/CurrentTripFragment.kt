@@ -28,7 +28,10 @@ import java.util.UUID
 
 class CurrentTripFragment: Fragment() {
 
-    private lateinit var binding: FragmentCurrentTripDetailBinding
+    private var _binding: FragmentCurrentTripDetailBinding? = null
+    private val binding get() = checkNotNull(_binding) {
+        "Cannot access the binding because it is null. Is the view visible"
+    }
 
     private val runStatus = CurrentRunTimer(R.string.start_button, "", 0, false)
     private lateinit var currentTrip: TripData
@@ -51,7 +54,7 @@ class CurrentTripFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentCurrentTripDetailBinding.inflate(layoutInflater, container, false)
+        _binding = FragmentCurrentTripDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -136,6 +139,11 @@ class CurrentTripFragment: Fragment() {
         binding.apply {
             
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 
