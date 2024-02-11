@@ -15,41 +15,15 @@
         android:theme="?attr/actionBarTheme"
         app:title="@string/app_name"
         />
+<!--id here is for the code-->
+    <androidx.fragment.app.FragmentContainerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:name="com.keatonbrink.android.cyclestats.CurrentTripFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity" />
 
-    <!--    Holds the start cycling data    -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/toggle_cycle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/start_button" />
-
-        <TextView
-            android:id="@+id/run_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/run_time_text" />
-
-        <Button
-            android:id="@+id/debug_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug"
-            android:layout_gravity="center_horizontal"
-            />
-
-        <TextView
-            android:id="@+id/trip_data"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            />
-    </LinearLayout>
 
 </LinearLayout>
