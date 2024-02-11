@@ -35,6 +35,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val trips: MutableList<TripData> = mutableListOf()
+    fun addTrip(trip: TripData) {
+        trips.add(trip)
+    }
+    fun getTrips(): MutableList<TripData> {
+        return trips
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

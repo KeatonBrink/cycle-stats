@@ -34,7 +34,7 @@ class CurrentTripFragment: Fragment() {
     private lateinit var currentTrip: TripData
     private var trackingEnabled = false
     private val logIntervalMinnis = Constants.LOG_INTERVAL_MILLIS
-    private val trips: MutableList<TripData> = mutableListOf()
+    private lateinit var mainActivity: MainActivity
     private val requestCode = 200
 
     // Location Pings
@@ -57,6 +57,8 @@ class CurrentTripFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainActivity = requireActivity() as MainActivity
 
         locationRequest = LocationRequest.Builder(logIntervalMinnis).setPriority(Priority.PRIORITY_HIGH_ACCURACY).build()
 
@@ -110,7 +112,7 @@ class CurrentTripFragment: Fragment() {
                 stopLogging()
 
 //                TODO: Add the trip to the database
-                trips.add(currentTrip)
+                mainActivity.addTrip(currentTrip)
                 Intent(requireContext(), CyclingService::class.java).also {
                     it.action = CyclingService.Actions.STOP.name
                     requireContext().startService(it)
@@ -120,7 +122,7 @@ class CurrentTripFragment: Fragment() {
 
         binding.debugButton.setOnClickListener { _: View ->
             var tripString = ""
-            for ((i, trip) in trips.withIndex()) {
+            for ((i, trip) in mainActivity.getTrips().withIndex()) {
                 Log.i("TAG", "Trip " + i.toString() + " has a number of pings: " + trip.pings.size)
                 tripString += "Trip " + i.toString() + " has a number of pings: " + trip.pings.size + "\n"
                 tripString += trip.pings.toString() + "\n"
