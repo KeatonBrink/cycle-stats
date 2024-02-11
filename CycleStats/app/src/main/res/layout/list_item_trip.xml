@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+    <TextView
+        android:id="@+id/trip_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Trip Title"/>
+    <TextView
+        android:id="@+id/trip_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trip Date"/>
+    <TextView
+        android:id="@+id/trip_time_duration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trip Time Duration"/>
+    <TextView
+        android:id="@+id/trip_distance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trip Distance"/>
+</LinearLayout>
