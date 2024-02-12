@@ -2,6 +2,7 @@ package com.keatonbrink.android.cyclestats
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.keatonbrink.android.cyclestats.databinding.ListItemTripBinding
 import java.text.SimpleDateFormat
@@ -11,6 +12,40 @@ import java.util.Locale
 class TripListHolder (
     val binding: ListItemTripBinding
     ) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(trip: TripData) {
+        binding.apply {
+            binding.tripTitle.text = trip.title
+            binding.tripDate.text = getDateStringFromCalendar(trip.date)
+            binding.tripTimeDuration.text = getTimeDurationFromPings(trip.pings)
+//            TODO: Add distance calculation
+            binding.tripDistance.text = "0.0 miles"
+
+            binding.root.setOnClickListener {
+                Toast.makeText(binding.root.context, "Trip clicked: ${trip.title}", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+    }
+
+    private fun getDateStringFromCalendar(calendar: Calendar): String {
+        val dateFormat = "MM/dd/yyyy"
+        val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US).format(calendar.time)
+        return simpleDateFormat.format(calendar.time)
+    }
+
+    private fun getTimeDurationFromPings(pings: List<LocationPings>): String {
+        var minTime = Long.MAX_VALUE
+        var maxTime = Long.MIN_VALUE
+        for (ping in pings) {
+            if(ping.time < minTime) {
+                minTime = ping.time
+            }
+            if(ping.time > maxTime) {
+                maxTime = ping.time
+            }
+        }
+        return "${maxTime - minTime} seconds"
+    }
 }
 
 class TripListAdapter(
@@ -27,31 +62,7 @@ class TripListAdapter(
 //    Populates the view holder with the data from the trip
     override fun onBindViewHolder(holder: TripListHolder, position: Int) {
         val trip = trips[position]
-        var minTime = Long.MAX_VALUE
-        var maxTime = Long.MIN_VALUE
-        for (ping in trip.pings) {
-            if(ping.time < minTime) {
-                minTime = ping.time
-            }
-            if(ping.time > maxTime) {
-                maxTime = ping.time
-            }
-        }
-        val tripTimeDuration = "${maxTime - minTime} seconds"
-        holder.apply {
-            binding.tripTitle.text = trip.title
-            binding.tripDate.text = getDateStringFromCalendar(trip.date)
-            binding.tripTimeDuration.text = tripTimeDuration
-//            TODO: Add distance calculation
-            binding.tripDistance.text = "0.0 miles"
-        }
-
-    }
-
-    fun getDateStringFromCalendar(calendar: Calendar): String {
-        val dateFormat = "MM/dd/yyyy"
-        val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US).format(calendar.time)
-        return simpleDateFormat.format(calendar.time)
+        holder.bind(trip)
     }
 
     override fun getItemCount() = trips.size
