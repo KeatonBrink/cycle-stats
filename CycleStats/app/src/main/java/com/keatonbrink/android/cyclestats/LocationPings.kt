@@ -1,11 +1,23 @@
 package com.keatonbrink.android.cyclestats
 
-import android.location.Location
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import java.util.UUID
 
+@Entity(
+    foreignKeys = [
+        ForeignKey(
+            entity = TripData::class,
+            parentColumns = ["id"],
+            childColumns = ["tripId"],
+            onDelete = ForeignKey.CASCADE // Optional: Specify the action on deletion
+        )
+    ]
+)
 data class LocationPings(
 //    Primary key
-    val id: UUID,
+    @PrimaryKey val id: UUID,
 //    Foreign key
     var tripId: UUID,
     val latitude: Double,

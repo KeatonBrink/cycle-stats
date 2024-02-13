@@ -7,8 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.keatonbrink.android.cyclestats.databinding.FragmentTripListBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 private const val TAG = "TripListFragment"
 
@@ -21,11 +26,6 @@ class TripListFragment: Fragment() {
 
     private val tripListViewModel: TripListViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total trips: ${tripListViewModel.getTrips().size}")
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,11 +35,19 @@ class TripListFragment: Fragment() {
 
         binding.tripsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        val trips = tripListViewModel.getTrips()
-        val adapter = TripListAdapter(trips)
-        binding.tripsRecyclerView.adapter = adapter
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val trips = tripListViewModel.loadTrips()
+                binding.tripsRecyclerView.adapter = TripListAdapter(trips)
+            }
+        }
     }
 
     override fun onDestroyView() {

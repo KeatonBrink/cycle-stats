@@ -1,12 +1,16 @@
 package com.keatonbrink.android.cyclestats
 
-import java.util.Calendar
+import androidx.room.Dao
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.Date
 import java.util.UUID
 
+@Entity
 data class TripData(
-    var id: UUID,
+    @PrimaryKey var id: UUID,
     var title: String,
-    var date: Calendar,
+    var date: Date,
     var startTime: Long,
-    var pings: MutableList<LocationPings>,
+//    var pings: MutableList<LocationPings>,
 )
