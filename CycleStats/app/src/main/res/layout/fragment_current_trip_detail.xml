@@ -21,18 +21,4 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/run_time_text" />
 
-        <Button
-            android:id="@+id/debug_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Debug"
-            android:layout_gravity="center_horizontal"
-            />
-
-        <TextView
-            android:id="@+id/trip_data"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            />
 </LinearLayout>
