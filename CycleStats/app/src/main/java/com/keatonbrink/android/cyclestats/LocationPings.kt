@@ -17,9 +17,9 @@ import java.util.UUID
 )
 data class LocationPing(
 //    Primary key
-    @PrimaryKey(autoGenerate = true) val id: UUID,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
 //    Foreign key
-    var tripId: UUID,
+    var tripId: Long,
     val latitude: Double,
     val longitude: Double,
     val altitude: Double,

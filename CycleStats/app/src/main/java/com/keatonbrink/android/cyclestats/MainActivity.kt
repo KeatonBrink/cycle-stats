@@ -34,11 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val trips: MutableList<TripData> = mutableListOf()
-    fun addTrip(trip: TripData) {
+    private val trips: MutableList<TripDataWithPings> = mutableListOf()
+    fun addTrip(trip: TripDataWithPings) {
         trips.add(trip)
     }
-    fun getTrips(): MutableList<TripData> {
+    fun getTrips(): MutableList<TripDataWithPings> {
         return trips
     }
 

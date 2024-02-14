@@ -7,7 +7,7 @@ import java.util.UUID
 
 @Entity(tableName = "trip_data")
 data class TripData(
-    @PrimaryKey(autoGenerate = true) var id: UUID,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     var title: String,
     var date: Date,
     var startTime: Long,

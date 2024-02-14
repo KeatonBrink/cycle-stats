@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.keatonbrink.android.cyclestats.databinding.FragmentTripListBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 
 private const val TAG = "TripListFragment"
 
@@ -44,8 +45,9 @@ class TripListFragment: Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val trips = tripListViewModel.loadTrips()
-                binding.tripsRecyclerView.adapter = TripListAdapter(trips)
+                tripListViewModel.trips.collect { trips ->
+                    binding.tripsRecyclerView.adapter = TripListAdapter(trips)
+                }
             }
         }
     }

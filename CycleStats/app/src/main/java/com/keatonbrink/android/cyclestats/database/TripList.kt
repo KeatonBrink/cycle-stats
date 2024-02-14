@@ -7,6 +7,8 @@ import androidx.room.Transaction
 import com.keatonbrink.android.cyclestats.LocationPing
 import com.keatonbrink.android.cyclestats.TripData
 import com.keatonbrink.android.cyclestats.TripDataWithPings
+import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 @Dao
 interface TripDao {
@@ -15,7 +17,10 @@ interface TripDao {
     suspend fun insertTrip(trip: TripData): Long
 
     @Query("SELECT * FROM trip_data")
-    suspend fun getTrips(): List<TripDataWithPings>
+    fun getTrips(): Flow<List<TripDataWithPings>>
+
+    @Query("SELECT * FROM trip_data WHERE id=(:tripId)")
+    suspend fun getTrip(tripId: Long): TripDataWithPings
 }
 
 @Dao

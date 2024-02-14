@@ -9,5 +9,5 @@ data class TripDataWithPings(
         parentColumn = "id",
         entityColumn = "tripId"
     )
-    val locationPings: List<LocationPing>
+    val locationPings: MutableList<LocationPing>
 )

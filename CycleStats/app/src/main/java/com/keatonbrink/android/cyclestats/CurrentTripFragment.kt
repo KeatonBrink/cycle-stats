@@ -21,10 +21,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.keatonbrink.android.cyclestats.databinding.FragmentCurrentTripDetailBinding
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 
 class CurrentTripFragment: Fragment() {
 
@@ -34,7 +32,7 @@ class CurrentTripFragment: Fragment() {
     }
 
     private val runStatus = CurrentRunTimer(R.string.start_button, "", 0, false)
-    private lateinit var currentTrip: TripData
+    private lateinit var currentTrip: TripDataWithPings
     private var trackingEnabled = false
     private val logIntervalMinnis = Constants.LOG_INTERVAL_MILLIS
     private lateinit var mainActivity: MainActivity
@@ -44,10 +42,6 @@ class CurrentTripFragment: Fragment() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,12 +82,12 @@ class CurrentTripFragment: Fragment() {
                 binding.toggleCycleButton.setText(runStatus.statusTextID)
                 binding.runTime.text = runStatus.startTimeString
 
-                currentTrip = TripData(
+                currentTrip = TripDataWithPings(
 //                    I am planning to change this when added to db
-                    UUID.randomUUID(),
+                    TripData(0,
                     getCurrentTimeString(),
-                    Calendar.getInstance(),
-                    System.currentTimeMillis() / 1000,
+                    Date(),
+                    System.currentTimeMillis() / 1000),
                     mutableListOf()
                 )
 
@@ -124,14 +118,9 @@ class CurrentTripFragment: Fragment() {
         }
 
         binding.debugButton.setOnClickListener { _: View ->
-            var tripString = ""
-            for ((i, trip) in mainActivity.getTrips().withIndex()) {
-                Log.i("TAG", "Trip " + i.toString() + " has a number of pings: " + trip.pings.size)
-                tripString += "Trip " + i.toString() + " has a number of pings: " + trip.pings.size + "\n"
-                tripString += trip.pings.toString() + "\n"
-                for (ping in trip.pings) {
-                    Log.i("TAG", "Ping: " + ping.latitude.toString() + ", " + ping.longitude.toString())
-                }
+            val tripString = ""
+            for ((i, _) in mainActivity.getTrips().withIndex()) {
+                Log.i("TAG", "Trip " + i.toString())
             }
             binding.tripData.text = tripString
         }
@@ -157,18 +146,18 @@ class CurrentTripFragment: Fragment() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 p0.lastLocation?.let { location ->
-                    val curLocationPing = LocationPings(
+                    val curLocationPing = LocationPing(
 //                    I am planning to change this when added to db
 
-                        UUID.randomUUID(),
-                        UUID.randomUUID(),
+                        0,
+                        0,
                         location.latitude,
                         location.longitude,
                         location.altitude,
                         location.speed,
                         location.time
                     )
-                    currentTrip.pings.add(curLocationPing)
+                    currentTrip.locationPings.add(curLocationPing)
                 }
             }
         }

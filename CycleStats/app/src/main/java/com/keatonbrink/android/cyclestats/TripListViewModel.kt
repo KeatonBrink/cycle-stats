@@ -13,47 +13,13 @@ import java.util.Random
 private const val TAG = "TripListViewModel"
 
 class TripListViewModel: ViewModel() {
-    private val trips: MutableList<TripData> = mutableListOf()
+    private val tripRepository = TripRepository.get()
 
-    private val random = Random()
-
-
+    val trips = tripRepository.getTrips()
 
 //    Generate random trip data for testing
     init {
-        Log.d(TAG, "init starting")
         viewModelScope.launch {
-            Log.d(TAG, "coroutine launched")
-            trips += loadTrips()
-
-            Log.d(TAG, "Loading complete")
         }
-    }
-
-    suspend fun loadTrips(): List<TripData> {
-        var trips = mutableListOf<TripData>()
-        var trip1 = TripData(
-            UUID.randomUUID(),
-            "Morning Ride",
-            Date(),
-            System.currentTimeMillis(),
-        )
-        trips.add(trip1)
-        val trip2 = TripData(
-            UUID.randomUUID(),
-            "Afternoon Ride",
-            Date(),
-            System.currentTimeMillis(),
-        )
-        trips.add(trip2)
-//        delay(5000)
-        return trips
-    }
-
-    fun addTrip(trip: TripData) {
-        trips.add(trip)
-    }
-    fun getTrips(): MutableList<TripData> {
-        return trips
     }
 }

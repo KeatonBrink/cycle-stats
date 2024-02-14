@@ -9,6 +9,9 @@ import android.os.Build
 class CyclingApp: Application() {
     override fun onCreate() {
         super.onCreate()
+
+        TripRepository.initialize(this)
+
         // Set up the notification channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
