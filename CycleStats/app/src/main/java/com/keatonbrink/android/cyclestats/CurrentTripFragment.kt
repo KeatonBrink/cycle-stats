@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -20,6 +22,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.keatonbrink.android.cyclestats.databinding.FragmentCurrentTripDetailBinding
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,6 +40,8 @@ class CurrentTripFragment: Fragment() {
     private val logIntervalMinnis = Constants.LOG_INTERVAL_MILLIS
     private lateinit var mainActivity: MainActivity
     private val requestCode = 200
+
+    private val tripListViewModel: TripListViewModel by viewModels()
 
     // Location Pings
     private lateinit var locationRequest: LocationRequest
@@ -109,7 +114,8 @@ class CurrentTripFragment: Fragment() {
                 stopLogging()
 
 //                TODO: Add the trip to the database
-                mainActivity.addTrip(currentTrip)
+//                mainActivity.addTrip(currentTrip)
+                showNewTrip(currentTrip)
                 Intent(requireContext(), CyclingService::class.java).also {
                     it.action = CyclingService.Actions.STOP.name
                     requireContext().startService(it)
@@ -117,16 +123,22 @@ class CurrentTripFragment: Fragment() {
             }
         }
 
-        binding.debugButton.setOnClickListener { _: View ->
-            val tripString = ""
-            for ((i, _) in mainActivity.getTrips().withIndex()) {
-                Log.i("TAG", "Trip " + i.toString())
-            }
-            binding.tripData.text = tripString
-        }
+//        binding.debugButton.setOnClickListener { _: View ->
+//            val tripString = ""
+//            for ((i, _) in mainActivity.getTrips().withIndex()) {
+//                Log.i("TAG", "Trip " + i.toString())
+//            }
+//            binding.tripData.text = tripString
+//        }
 
         binding.apply {
             
+        }
+    }
+
+    private fun showNewTrip(trip: TripDataWithPings) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            tripListViewModel.addTripWithPings(trip)
         }
     }
 
@@ -155,7 +167,7 @@ class CurrentTripFragment: Fragment() {
                         location.longitude,
                         location.altitude,
                         location.speed,
-                        location.time
+                        location.time / 1000
                     )
                     currentTrip.locationPings.add(curLocationPing)
                 }

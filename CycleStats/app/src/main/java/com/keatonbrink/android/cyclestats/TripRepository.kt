@@ -17,8 +17,16 @@ class TripRepository private constructor(context: Context) {
     ).build(
     )
 
-    suspend fun addTrip(trip: TripData): Long {
-        return database.tripDao().insertTrip(trip)
+    suspend fun  addTripDataWithPings(trip: TripDataWithPings) {
+        val parentID = database.tripDao().addTrip(trip.tripData)
+        trip.locationPings.forEach { ping ->
+            ping.tripId = parentID
+            database.tripLocationPingDao().addTripLocationPing(ping)
+        }
+    }
+
+    suspend fun addTripData(trip: TripData): Long {
+        return database.tripDao().addTrip(trip)
     }
 
     fun getTrips(): Flow<List<TripDataWithPings>> {
@@ -34,7 +42,7 @@ class TripRepository private constructor(context: Context) {
     }
 
     suspend fun addLocationPing(locationPing: LocationPing) {
-        database.tripLocationPingDao().insertTripLocationPing(locationPing)
+        database.tripLocationPingDao().addTripLocationPing(locationPing)
     }
 
 

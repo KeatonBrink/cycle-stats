@@ -34,13 +34,13 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val trips: MutableList<TripDataWithPings> = mutableListOf()
-    fun addTrip(trip: TripDataWithPings) {
-        trips.add(trip)
-    }
-    fun getTrips(): MutableList<TripDataWithPings> {
-        return trips
-    }
+//    private val trips: MutableList<TripDataWithPings> = mutableListOf()
+//    fun addTrip(trip: TripDataWithPings) {
+//        trips.add(trip)
+//    }
+//    fun getTrips(): MutableList<TripDataWithPings> {
+//        return trips
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

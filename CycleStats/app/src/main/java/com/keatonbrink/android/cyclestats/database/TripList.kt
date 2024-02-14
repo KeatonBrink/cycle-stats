@@ -14,7 +14,7 @@ import java.util.UUID
 interface TripDao {
 
     @Insert
-    suspend fun insertTrip(trip: TripData): Long
+    suspend fun addTrip(trip: TripData): Long
 
     @Query("SELECT * FROM trip_data")
     fun getTrips(): Flow<List<TripDataWithPings>>
@@ -27,7 +27,7 @@ interface TripDao {
 interface TripLocationPingDao {
 
     @Insert
-    suspend fun insertTripLocationPing(tripPing: LocationPing)
+    suspend fun addTripLocationPing(tripPing: LocationPing)
 
     @Query("SELECT * FROM location_pings WHERE tripId=(:tripId)")
     suspend fun getTripPings(tripId: Long): List<LocationPing>
