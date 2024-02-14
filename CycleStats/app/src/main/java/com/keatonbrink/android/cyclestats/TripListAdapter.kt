@@ -12,16 +12,16 @@ import java.util.Locale
 class TripListHolder (
     val binding: ListItemTripBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(trip: TripData) {
+    fun bind(trip: TripDataWithPings) {
         binding.apply {
-            binding.tripTitle.text = trip.title
-            binding.tripDate.text = getDateStringFromCalendar(trip.date)
-            binding.tripTimeDuration.text = getTimeDurationFromPings(trip.pings)
+            binding.tripTitle.text = trip.tripData.title
+            binding.tripDate.text = trip.tripData.date.toString()
+            binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
 //            TODO: Add distance calculation
             binding.tripDistance.text = "0.0 miles"
 
             binding.root.setOnClickListener {
-                Toast.makeText(binding.root.context, "Trip clicked: ${trip.title}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.root.context, "Trip clicked: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -33,7 +33,7 @@ class TripListHolder (
         return simpleDateFormat.format(calendar.time)
     }
 
-    private fun getTimeDurationFromPings(pings: List<LocationPings>): String {
+    private fun getTimeDurationFromPings(pings: List<LocationPing>): String {
         var minTime = Long.MAX_VALUE
         var maxTime = Long.MIN_VALUE
         for (ping in pings) {
@@ -49,7 +49,7 @@ class TripListHolder (
 }
 
 class TripListAdapter(
-    private val trips: List<TripData>
+    private val trips: List<TripDataWithPings>
     ) : RecyclerView.Adapter<TripListHolder>() {
 
 //        Generates unique view holders for each trip

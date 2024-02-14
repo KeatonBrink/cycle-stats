@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.util.UUID
 
-@Entity(
+@Entity(tableName = "location_pings",
     foreignKeys = [
         ForeignKey(
             entity = TripData::class,
@@ -15,9 +15,9 @@ import java.util.UUID
         )
     ]
 )
-data class LocationPings(
+data class LocationPing(
 //    Primary key
-    @PrimaryKey val id: UUID,
+    @PrimaryKey(autoGenerate = true) val id: UUID,
 //    Foreign key
     var tripId: UUID,
     val latitude: Double,

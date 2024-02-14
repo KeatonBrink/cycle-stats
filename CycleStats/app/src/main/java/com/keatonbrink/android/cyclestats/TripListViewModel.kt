@@ -37,105 +37,14 @@ class TripListViewModel: ViewModel() {
             "Morning Ride",
             Date(),
             System.currentTimeMillis(),
-            mutableListOf(
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                )
-            )
         )
-        for (i in 0 until trip1.pings.size) {
-            trip1.pings[i].tripId = trip1.id
-        }
         trips.add(trip1)
         val trip2 = TripData(
             UUID.randomUUID(),
             "Afternoon Ride",
-            Calendar.getInstance(),
+            Date(),
             System.currentTimeMillis(),
-            mutableListOf(
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                ),
-                LocationPings(
-                    UUID.randomUUID(),
-                    UUID.randomUUID(),
-                    37.7749,
-                    -122.4194,
-                    0.0,
-                    0.0f,
-                    System.currentTimeMillis() + random.nextInt(100000)
-                )
-            )
         )
-        for (i in 0 until trip2.pings.size) {
-            trip2.pings[i].tripId = trip1.id
-        }
         trips.add(trip2)
 //        delay(5000)
         return trips
