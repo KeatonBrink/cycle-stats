@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navigation_bar_color">#001050</color>
+    <color name="start_biking_button_color">#2F6D18</color>
+    <color name="stop_biking_button_color">#D32F2F</color>
+    <color name="overall_background">#000723</color>
 </resources>

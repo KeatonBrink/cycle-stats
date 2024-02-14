@@ -5,7 +5,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,21 +14,25 @@
             android:id="@+id/trip_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/white"
             android:text="Trip Title"/>
         <TextView
             android:id="@+id/trip_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Trip Date"/>
         <TextView
             android:id="@+id/trip_time_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Trip Time Duration"/>
         <TextView
             android:id="@+id/trip_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:text="Trip Distance"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
