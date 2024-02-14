@@ -67,23 +67,4 @@ class TripListAdapter(
 
     override fun getItemCount() = trips.size
 
-
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripListHolder {
-//        val binding = ListItemTripBinding.inflate(
-//            LayoutInflater.from(parent.context),
-//            parent,
-//            false
-//        )
-//        return TripListHolder(binding)
-//    }
-//
-//    override fun onBindViewHolder(holder: TripListHolder, position: Int) {
-//        val trip = trips[position]
-//        holder.binding.apply {
-//            tripTitle.text = trip.title
-//            tripDate.text = trip.date.toString()
-//        }
-//    }
-//
-//    override fun getItemCount() = trips.size
 }
