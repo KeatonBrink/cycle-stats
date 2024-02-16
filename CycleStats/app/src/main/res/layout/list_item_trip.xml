@@ -34,5 +34,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="Trip Distance"/>
+
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

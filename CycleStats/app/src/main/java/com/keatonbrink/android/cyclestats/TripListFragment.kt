@@ -11,6 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.keatonbrink.android.cyclestats.databinding.FragmentTripListBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,6 +37,7 @@ class TripListFragment: Fragment() {
         _binding = FragmentTripListBinding.inflate(inflater, container, false)
 
         binding.tripsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        LinearSnapHelper().attachToRecyclerView(binding.tripsRecyclerView)
 
 
         return binding.root
