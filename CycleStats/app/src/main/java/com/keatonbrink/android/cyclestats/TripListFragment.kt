@@ -43,6 +43,7 @@ class TripListFragment: Fragment() {
         binding.tripsRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
+                val mainActivity = activity as? MainActivity
                 if(newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_IDLE")
                     val currentVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
@@ -50,11 +51,12 @@ class TripListFragment: Fragment() {
                     if (currentVisibleItemPosition != RecyclerView.NO_POSITION) {
                         val trip = (recyclerView.adapter as TripListAdapter).getTripAtPosition(currentVisibleItemPosition)
                         Log.d(TAG, "onScrollStateChanged: trip: ${trip.tripData.title}")
-                        val curTripPingsInOrder = trip.getPingsInOrder()
-
+                        // Call add trip pings to map from MainActivity
+                        mainActivity?.addTripPingsToMapAsPolyLines(trip)
                     }
                 } else if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_DRAGGING")
+                    mainActivity?.clearMap()
                 } else if(newState == RecyclerView.SCROLL_STATE_SETTLING) {
                     Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_SETTLING")
                 } else {
