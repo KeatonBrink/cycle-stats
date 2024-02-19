@@ -10,4 +10,8 @@ data class TripDataWithPings(
         entityColumn = "tripId"
     )
     val locationPings: MutableList<LocationPing>
-)
+) {
+    fun getPingsInOrder(): List<LocationPing> {
+        return locationPings.sortedBy { it.time }
+    }
+}

@@ -67,4 +67,8 @@ class TripListAdapter(
 
     override fun getItemCount() = trips.size
 
+    fun getTripAtPosition(position: Int): TripDataWithPings {
+        return trips[position]
+    }
+
 }

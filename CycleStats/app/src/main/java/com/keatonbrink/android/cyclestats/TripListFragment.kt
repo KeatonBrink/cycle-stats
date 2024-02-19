@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.keatonbrink.android.cyclestats.databinding.FragmentTripListBinding
 import kotlinx.coroutines.Job
@@ -38,6 +39,29 @@ class TripListFragment: Fragment() {
 
         binding.tripsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         LinearSnapHelper().attachToRecyclerView(binding.tripsRecyclerView)
+
+        binding.tripsRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_IDLE")
+                    val currentVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                    Log.d(TAG, "onScrollStateChanged: currentVisibleItemPosition: $currentVisibleItemPosition")
+                    if (currentVisibleItemPosition != RecyclerView.NO_POSITION) {
+                        val trip = (recyclerView.adapter as TripListAdapter).getTripAtPosition(currentVisibleItemPosition)
+                        Log.d(TAG, "onScrollStateChanged: trip: ${trip.tripData.title}")
+                        val curTripPingsInOrder = trip.getPingsInOrder()
+
+                    }
+                } else if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_DRAGGING")
+                } else if(newState == RecyclerView.SCROLL_STATE_SETTLING) {
+                    Log.d(TAG, "onScrollStateChanged: SCROLL_STATE_SETTLING")
+                } else {
+                    Log.d(TAG, "onScrollStateChanged: UNKNOWN")
+                }
+            }
+        })
 
 
         return binding.root
