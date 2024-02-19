@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     // Gets called from TripListFragment.kt when a new trip is selected (in focus)
     fun addTripPingsToMapAsPolyLines(trip: TripDataWithPings) {
         val pings = trip.getPingsInOrder()
-        val polyLineOptions = PolylineOptions()
+        val polyLineOptions = PolylineOptions().color(R.integer.poly_line_color).width(25f)
         for (ping in pings) {
             val latLng = LatLng(ping.latitude, ping.longitude)
             polyLineOptions.add(latLng)

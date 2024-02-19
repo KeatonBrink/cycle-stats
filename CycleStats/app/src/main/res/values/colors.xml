@@ -6,4 +6,5 @@
     <color name="start_biking_button_color">#2F6D18</color>
     <color name="stop_biking_button_color">#D32F2F</color>
     <color name="overall_background">#000723</color>
+    <integer name="poly_line_color">0xFF473266</integer>
 </resources>
