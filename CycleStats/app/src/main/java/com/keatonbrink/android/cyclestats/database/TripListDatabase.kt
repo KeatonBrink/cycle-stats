@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 import com.keatonbrink.android.cyclestats.LocationPing
 import com.keatonbrink.android.cyclestats.TripData
 
-@Database(entities = [TripData::class, LocationPing::class], version = 1)
+@Database(entities = [TripData::class, LocationPing::class], version = 2)
 @TypeConverters(TripTypeConverters::class)
 abstract class TripListDatabase : RoomDatabase() {
     abstract fun tripDao(): TripDao

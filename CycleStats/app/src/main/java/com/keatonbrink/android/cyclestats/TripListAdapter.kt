@@ -18,7 +18,7 @@ class TripListHolder (
             binding.tripDate.text = trip.tripData.date.toString()
             binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
 //            TODO: Add distance calculation
-            binding.tripDistance.text = "0.0 miles"
+            binding.tripDistance.text = trip.tripData.totalMiles.toString() + " miles"
 
             binding.root.setOnClickListener {
                 Toast.makeText(binding.root.context, "Trip clicked: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()

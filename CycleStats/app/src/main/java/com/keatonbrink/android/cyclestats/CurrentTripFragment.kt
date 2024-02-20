@@ -21,11 +21,18 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.keatonbrink.android.cyclestats.Constants.EARTH_RADIUS_KM
+import com.keatonbrink.android.cyclestats.Constants.KM_TO_MILES
 import com.keatonbrink.android.cyclestats.databinding.FragmentCurrentTripDetailBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.asin
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class CurrentTripFragment: Fragment() {
 
@@ -90,10 +97,11 @@ class CurrentTripFragment: Fragment() {
                 currentTrip = TripDataWithPings(
 //                    I am planning to change this when added to db
                     TripData(0,
-                    getCurrentTimeString(),
-                    Date(),
-                    System.currentTimeMillis() / 1000),
-                    mutableListOf()
+                        getCurrentTimeString(),
+                        Date(),
+                        System.currentTimeMillis() / 1000,
+                        0.0),
+                    mutableListOf(),
                 )
 
                 Intent(requireContext(), CyclingService::class.java).also {
@@ -110,6 +118,8 @@ class CurrentTripFragment: Fragment() {
                 runStatus.startTimeSeconds = 0
                 binding.toggleCycleButton.setText(runStatus.statusTextID)
                 binding.runTime.text = ""
+
+                currentTrip.tripData.totalMiles = calculateTotalMiles(currentTrip.locationPings);
 
                 stopLogging()
 
@@ -145,6 +155,25 @@ class CurrentTripFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun calculateTotalMiles(pings: MutableList<LocationPing>): Double {
+        var totalMiles = 0.0
+        for (i in 0 until pings.size - 1) {
+            totalMiles += calculateMilesBetweenPings(pings[i], pings[i + 1])
+        }
+        return totalMiles
+    }
+
+    private fun calculateMilesBetweenPings(ping1: LocationPing, ping2: LocationPing): Double {
+        val dLat = Math.toRadians(ping2.latitude - ping1.latitude);
+        val dLon = Math.toRadians(ping2.longitude - ping2.longitude);
+        val originLat = Math.toRadians(ping1.latitude);
+        val destinationLat = Math.toRadians(ping2.latitude);
+
+        val a = sin(dLat / 2).pow(2.toDouble()) + sin(dLon / 2).pow(2.toDouble()) * cos(originLat) * cos(destinationLat);
+        val c = 2 * asin(sqrt(a));
+        return EARTH_RADIUS_KM * c * KM_TO_MILES;
     }
 
 

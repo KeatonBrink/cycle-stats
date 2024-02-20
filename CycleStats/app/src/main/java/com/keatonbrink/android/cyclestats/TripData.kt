@@ -11,5 +11,6 @@ data class TripData(
     var title: String,
     var date: Date,
     var startTime: Long,
+    var totalMiles: Double,
 //    var pings: MutableList<LocationPings>,
 )
