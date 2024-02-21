@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
@@ -63,15 +64,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     fun addTripPingsToMapAsPolyLines(trip: TripDataWithPings) {
         val pings = trip.getPingsInOrder()
         val polyLineOptions = PolylineOptions().color(R.integer.poly_line_color).width(25f)
+
+        // Used for centering the map on the poly line
+        val builder = LatLngBounds.Builder()
+
         for (ping in pings) {
             val latLng = LatLng(ping.latitude, ping.longitude)
             polyLineOptions.add(latLng)
+            builder.include(LatLng(ping.latitude, ping.longitude))
         }
         mMap.addPolyline(polyLineOptions)
-        // Center map at first ping
-        val firstPing = pings.first()
-        val firstPingLatLng = LatLng(firstPing.latitude, firstPing.longitude)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(firstPingLatLng))
+
+        val bounds = builder.build()
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
     }
 
     // Gets called from TripListFragment.kt when the user drags the recycler view
