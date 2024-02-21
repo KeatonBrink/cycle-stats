@@ -150,6 +150,7 @@ class CurrentTripFragment: Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             tripListViewModel.addTripWithPings(trip)
         }
+        mainActivity.addTripPingsToMapAsPolyLines(trip)
     }
 
     override fun onDestroyView() {
