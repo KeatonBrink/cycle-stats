@@ -15,10 +15,11 @@ class TripListHolder (
     fun bind(trip: TripDataWithPings) {
         binding.apply {
             binding.tripTitle.text = trip.tripData.title
-            binding.tripDate.text = trip.tripData.date.toString()
+            val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+            binding.tripDate.text = sdf.format(trip.tripData.date)
             binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
 //            TODO: Add distance calculation
-            binding.tripDistance.text = trip.tripData.totalMiles.toString() + " miles"
+            binding.tripDistance.text = String.format("%.2f miles", trip.tripData.totalMiles)
 
             binding.root.setOnClickListener {
                 Toast.makeText(binding.root.context, "Trip clicked: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
