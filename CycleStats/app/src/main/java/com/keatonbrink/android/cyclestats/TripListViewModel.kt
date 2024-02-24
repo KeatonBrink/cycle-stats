@@ -27,10 +27,6 @@ class TripListViewModel: ViewModel() {
         tripRepository.addTripDataWithPings(trip)
     }
 
-    fun deleteTripWithPings(trip: TripDataWithPings) {
-        tripRepository.deleteTripDataWithPings(trip)
-    }
-
 //    Generate random trip data for testing
     init {
         viewModelScope.launch {
