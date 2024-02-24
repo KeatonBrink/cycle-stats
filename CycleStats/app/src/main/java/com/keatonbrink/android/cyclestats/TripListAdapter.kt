@@ -3,8 +3,10 @@ package com.keatonbrink.android.cyclestats
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.keatonbrink.android.cyclestats.databinding.ListItemTripBinding
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -18,11 +20,15 @@ class TripListHolder (
             val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
             binding.tripDate.text = sdf.format(trip.tripData.date)
             binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
-//            TODO: Add distance calculation
             binding.tripDistance.text = String.format("%.2f miles", trip.tripData.totalMiles)
 
             binding.root.setOnClickListener {
                 Toast.makeText(binding.root.context, "Trip clicked: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
+            }
+
+            binding.tripDeletion.setOnClickListener {
+                Toast.makeText(binding.root.context, "Trip deleted: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
+                TripRepository.get().deleteTripDataWithPings(trip)
             }
 
         }
@@ -50,7 +56,7 @@ class TripListHolder (
 }
 
 class TripListAdapter(
-    private val trips: List<TripDataWithPings>
+    private val trips: List<TripDataWithPings>,
     ) : RecyclerView.Adapter<TripListHolder>() {
 
 //        Generates unique view holders for each trip
