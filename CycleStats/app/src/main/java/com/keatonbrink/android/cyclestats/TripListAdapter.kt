@@ -3,6 +3,7 @@ package com.keatonbrink.android.cyclestats
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.keatonbrink.android.cyclestats.databinding.ListItemTripBinding
@@ -27,8 +28,19 @@ class TripListHolder (
             }
 
             binding.tripDeletion.setOnClickListener {
-                Toast.makeText(binding.root.context, "Trip deleted: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
-                TripRepository.get().deleteTripDataWithPings(trip)
+                // Set up a confirmation dialog
+                val builder = AlertDialog.Builder(binding.root.context)
+                builder.setMessage("Are you sure you want to delete this trip?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { _, _ ->
+                        Toast.makeText(binding.root.context, "Trip deleted: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
+                        TripRepository.get().deleteTripDataWithPings(trip)
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                val alert = builder.create()
+                alert.show()
             }
 
         }

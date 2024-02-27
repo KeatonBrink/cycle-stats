@@ -62,6 +62,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // Gets called from TripListFragment.kt when a new trip is selected (in focus)
     fun addTripPingsToMapAsPolyLines(trip: TripDataWithPings) {
+        clearMap()
+
         val pings = trip.getPingsInOrder()
         val polyLineOptions = PolylineOptions().color(R.integer.poly_line_color).width(25f)
 
