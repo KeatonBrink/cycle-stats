@@ -14,17 +14,26 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMainBinding
+    private lateinit var repository: TripRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        repository = TripRepository.get()
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -45,10 +54,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        // Start a coroutine on the IO dispatcher
+        CoroutineScope(Dispatchers.IO).launch {
+            val mostRecentTrip = repository.getTripList().firstOrNull()
+            withContext(Dispatchers.Main) {
+                if (mostRecentTrip != null) {
+                    addTripPingsToMapAsPolyLines(mostRecentTrip)
+                } else {
+                    // Add a marker in Sydney and move the camera
+                    val sydney = LatLng(-34.0, 151.0)
+                    mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+                }
+            }
+        }
 
     }
 

@@ -49,6 +49,10 @@ class TripRepository private constructor(context: Context, private val coroutine
         return database.tripDao().getTrips()
     }
 
+    fun getTripList(): List<TripDataWithPings> {
+        return database.tripDao().getTripList()
+    }
+
     suspend fun getTrip(tripId: Long): TripDataWithPings {
         return database.tripDao().getTrip(tripId)
     }

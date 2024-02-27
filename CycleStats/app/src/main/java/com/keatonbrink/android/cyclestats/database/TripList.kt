@@ -24,6 +24,9 @@ interface TripDao {
     @Query("SELECT * FROM trip_data ORDER BY date DESC, startTime DESC")
     fun getTrips(): Flow<List<TripDataWithPings>>
 
+    @Query("SELECT * FROM trip_data ORDER BY date DESC, startTime DESC")
+    fun getTripList(): List<TripDataWithPings>
+
     @Query("SELECT * FROM trip_data WHERE id=(:tripId)")
     suspend fun getTrip(tripId: Long): TripDataWithPings
 }
