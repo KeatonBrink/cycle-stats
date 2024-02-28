@@ -7,4 +7,5 @@
     <string name="stop_cycling">Done Cycling!</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="deletion_icon_description">Trashcan for trip deletion</string>
+    <string name="cycle_summary">Cycle Summary</string>
 </resources>
