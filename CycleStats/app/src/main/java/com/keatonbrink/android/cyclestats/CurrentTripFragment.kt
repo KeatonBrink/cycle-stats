@@ -59,7 +59,7 @@ class CurrentTripFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCurrentTripDetailBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
@@ -119,7 +119,7 @@ class CurrentTripFragment: Fragment() {
                 binding.toggleCycleButton.setText(runStatus.statusTextID)
                 binding.runTime.text = ""
 
-                currentTrip.tripData.totalMiles = calculateTotalMiles(currentTrip.locationPings);
+                currentTrip.tripData.totalMiles = calculateTotalMiles(currentTrip.locationPings)
 
                 stopLogging()
 
@@ -167,14 +167,14 @@ class CurrentTripFragment: Fragment() {
     }
 
     private fun calculateMilesBetweenPings(ping1: LocationPing, ping2: LocationPing): Double {
-        val dLat = Math.toRadians(ping2.latitude - ping1.latitude);
-        val dLon = Math.toRadians(ping2.longitude - ping2.longitude);
-        val originLat = Math.toRadians(ping1.latitude);
-        val destinationLat = Math.toRadians(ping2.latitude);
+        val dLat = Math.toRadians(ping2.latitude - ping1.latitude)
+        val dLon = Math.toRadians(ping2.longitude - ping2.longitude)
+        val originLat = Math.toRadians(ping1.latitude)
+        val destinationLat = Math.toRadians(ping2.latitude)
 
-        val a = sin(dLat / 2).pow(2.toDouble()) + sin(dLon / 2).pow(2.toDouble()) * cos(originLat) * cos(destinationLat);
-        val c = 2 * asin(sqrt(a));
-        return EARTH_RADIUS_KM * c * KM_TO_MILES;
+        val a = sin(dLat / 2).pow(2.toDouble()) + sin(dLon / 2).pow(2.toDouble()) * cos(originLat) * cos(destinationLat)
+        val c = 2 * asin(sqrt(a))
+        return EARTH_RADIUS_KM * c * KM_TO_MILES
     }
 
 
