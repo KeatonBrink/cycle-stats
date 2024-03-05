@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.gson.Gson
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,6 +69,39 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // to make the Navigation drawer icon always appear on the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Set up the on click listener for items in navigation drawer
+        val navigationView = binding.navigationView
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_summary -> {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val trips = repository.getTripList()
+                        val gson = Gson()
+                        val tripsJson = gson.toJson(trips)
+                        val fragment = SummaryDetailsFragment.newInstance(tripsJson)
+                        withContext(Dispatchers.Main) {
+                            // Replace the current trip fragment
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.current_trip_fragment_container, fragment)
+                                .commit()
+                        }
+                        drawerLayout.closeDrawers()
+                    }
+                }
+                R.id.nav_trips -> {
+                    // Replace the trip list fragment
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.current_trip_fragment_container, CurrentAndAllTripsParentFragment())
+                        .commit()
+                    drawerLayout.closeDrawers()
+                }
+            }
+            // Close the drawer
+            drawerLayout.closeDrawers()
+            true
+        }
+
     }
 
     // override the onOptionsItemSelected()

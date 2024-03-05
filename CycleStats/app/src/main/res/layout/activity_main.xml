@@ -30,31 +30,26 @@
             android:id="@+id/current_trip_fragment_container"
             android:name="com.keatonbrink.android.cyclestats.CurrentAndAllTripsParentFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             tools:context=".MainActivity"
             tools:layout="@layout/fragment_current_and_list_trip_parent" />
 
-        <LinearLayout
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            >
-
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@android:layout/simple_gallery_item"
-                />
-
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            tools:layout="@android:layout/simple_gallery_item"
+            />
 
     </LinearLayout>
 
     <!-- this the navigation view which draws and shows the navigation drawer -->
     <!-- include the menu created in the menu folder -->
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
