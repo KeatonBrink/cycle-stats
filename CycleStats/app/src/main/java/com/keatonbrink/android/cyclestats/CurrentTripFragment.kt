@@ -133,14 +133,6 @@ class CurrentTripFragment: Fragment() {
             }
         }
 
-//        binding.debugButton.setOnClickListener { _: View ->
-//            val tripString = ""
-//            for ((i, _) in mainActivity.getTrips().withIndex()) {
-//                Log.i("TAG", "Trip " + i.toString())
-//            }
-//            binding.tripData.text = tripString
-//        }
-
         binding.apply {
             
         }
@@ -172,6 +164,7 @@ class CurrentTripFragment: Fragment() {
         val long1 = Math.toRadians(ping1.longitude)
         val long2 = Math.toRadians(ping2.longitude)
 
+//        d = 2R × sin⁻¹(√[sin²((θ₂ - θ₁)/2) + cosθ₁ × cosθ₂ × sin²((φ₂ - φ₁)/2)]) - https://www.omnicalculator.com/other/latitude-longitude-distance
         return 2* EARTH_RADIUS_MILES*asin(sqrt(sin((lat2 - lat1)/2).pow(2) + cos(lat1)*cos(lat2)*sin((long2-long1)/2).pow(2)))
     }
 
