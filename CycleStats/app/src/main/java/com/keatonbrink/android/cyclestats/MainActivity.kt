@@ -20,8 +20,6 @@ import com.google.gson.Gson
 import com.keatonbrink.android.cyclestats.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -87,7 +85,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                                 .commit()
                         }
                         drawerLayout.closeDrawers()
-                        addAllTripPingsToMapAsPolylines()
+                        addAllTripPingsToMapAsPolyLines()
                     }
                 }
                 R.id.nav_trips -> {
@@ -96,6 +94,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         .replace(R.id.current_trip_fragment_container, CurrentAndAllTripsParentFragment())
                         .commit()
                     drawerLayout.closeDrawers()
+                    clearMap()
+                    addFirstTripToMapAsPolyLines { addSydneyDefaultToMap() }
                 }
             }
             // Close the drawer
@@ -119,26 +119,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-
-        // Start a coroutine on the IO dispatcher
-        CoroutineScope(Dispatchers.IO).launch {
-            val mostRecentTrip = repository.getTripList().firstOrNull()
-            withContext(Dispatchers.Main) {
-                if (mostRecentTrip != null) {
-                    clearMap()
-                    addTripPingsToMapAsPolyLines(mostRecentTrip)
-                } else {
-                    // Add a marker in Sydney and move the camera
-                    val sydney = LatLng(-34.0, 151.0)
-                    mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-                }
-            }
-        }
-
+        addFirstTripToMapAsPolyLines { addSydneyDefaultToMap() }
     }
 
-    fun addAllTripPingsToMapAsPolylines() {
+    private fun addAllTripPingsToMapAsPolyLines() {
         CoroutineScope(Dispatchers.IO).launch {
             val trips = repository.getTripList()
             withContext(Dispatchers.Main) {
@@ -147,6 +131,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    private fun addFirstTripToMapAsPolyLines(callback: () -> Unit){
+        CoroutineScope(Dispatchers.IO).launch {
+            val mostRecentTrip = repository.getTripList().firstOrNull()
+            withContext(Dispatchers.Main) {
+                if (mostRecentTrip != null) {
+                    clearMap()
+                    addTripPingsToMapAsPolyLines(mostRecentTrip)
+                } else {
+                    callback()
+                }
+            }
+        }
+    }
+
+    private fun addSydneyDefaultToMap() {
+        clearMap()
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     // Gets called from TripListFragment.kt when a new trip is selected (in focus)
