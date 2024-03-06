@@ -21,16 +21,14 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.keatonbrink.android.cyclestats.Constants.EARTH_RADIUS_KM
-import com.keatonbrink.android.cyclestats.Constants.KM_TO_MILES
+import com.keatonbrink.android.cyclestats.Constants.EARTH_RADIUS_MILES
 import com.keatonbrink.android.cyclestats.databinding.FragmentCurrentTripDetailBinding
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.asin
+import kotlin.math.atan2
 import kotlin.math.cos
-import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -167,14 +165,17 @@ class CurrentTripFragment: Fragment() {
     }
 
     private fun calculateMilesBetweenPings(ping1: LocationPing, ping2: LocationPing): Double {
-        val dLat = Math.toRadians(ping2.latitude - ping1.latitude)
-        val dLon = Math.toRadians(ping2.longitude - ping2.longitude)
-        val originLat = Math.toRadians(ping1.latitude)
-        val destinationLat = Math.toRadians(ping2.latitude)
+        val lat1 = Math.toRadians(ping1.latitude)
+        val lat2 = Math.toRadians(ping2.latitude)
+        val deltaLat = Math.toRadians(ping2.latitude - ping1.latitude)
+        val deltaLon = Math.toRadians(ping2.longitude - ping1.longitude)
 
-        val a = sin(dLat / 2).pow(2.toDouble()) + sin(dLon / 2).pow(2.toDouble()) * cos(originLat) * cos(destinationLat)
-        val c = 2 * asin(sqrt(a))
-        return EARTH_RADIUS_KM * c * KM_TO_MILES
+        val a = sin(deltaLat / 2) * sin(deltaLat / 2) +
+                cos(lat1) * cos(lat2) *
+                sin(deltaLon / 2) * sin(deltaLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return EARTH_RADIUS_MILES * c
     }
 
 

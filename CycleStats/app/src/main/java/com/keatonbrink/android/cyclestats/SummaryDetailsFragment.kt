@@ -8,13 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.google.gson.Gson
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SummaryDetailsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SummaryDetailsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var trips: List<TripDataWithPings>? = null
 
     private var totalTimeText: String = ""

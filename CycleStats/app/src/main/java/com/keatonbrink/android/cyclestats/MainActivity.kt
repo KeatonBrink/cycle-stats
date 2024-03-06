@@ -136,6 +136,34 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    fun addAllTripPingsToMapAsPolylines() {
+        clearMap()
+        // Polylines should have random colors
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val trips = repository.getTripList()
+            // Generate pings first, then launch withContext(Dispatchers.Main) to add them to the map
+            for (trip in trips) {
+                val pings = trip.getPingsInOrder()
+                val polyLineOptions = PolylineOptions().color(R.integer.poly_line_color).width(25f)
+
+                // Used for centering the map on the poly line
+                val builder = LatLngBounds.Builder()
+
+                for (ping in pings) {
+                    val latLng = LatLng(ping.latitude, ping.longitude)
+                    polyLineOptions.add(latLng)
+                    builder.include(LatLng(ping.latitude, ping.longitude))
+                }
+                withContext(Dispatchers.Main) {
+                    mMap.addPolyline(polyLineOptions)
+                    val bounds = builder.build()
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
+                }
+            }
+        }
+    }
+
     // Gets called from TripListFragment.kt when a new trip is selected (in focus)
     fun addTripPingsToMapAsPolyLines(trip: TripDataWithPings) {
         clearMap()
