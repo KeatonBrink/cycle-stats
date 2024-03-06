@@ -27,8 +27,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -167,15 +169,10 @@ class CurrentTripFragment: Fragment() {
     private fun calculateMilesBetweenPings(ping1: LocationPing, ping2: LocationPing): Double {
         val lat1 = Math.toRadians(ping1.latitude)
         val lat2 = Math.toRadians(ping2.latitude)
-        val deltaLat = Math.toRadians(ping2.latitude - ping1.latitude)
-        val deltaLon = Math.toRadians(ping2.longitude - ping1.longitude)
+        val long1 = Math.toRadians(ping1.longitude)
+        val long2 = Math.toRadians(ping2.longitude)
 
-        val a = sin(deltaLat / 2) * sin(deltaLat / 2) +
-                cos(lat1) * cos(lat2) *
-                sin(deltaLon / 2) * sin(deltaLon / 2)
-        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
-
-        return EARTH_RADIUS_MILES * c
+        return 2* EARTH_RADIUS_MILES*asin(sqrt(sin((lat2 - lat1)/2).pow(2) + cos(lat1)*cos(lat2)*sin((long2-long1)/2).pow(2)))
     }
 
 
