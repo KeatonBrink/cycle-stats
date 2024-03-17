@@ -100,7 +100,8 @@ class CurrentTripFragment: Fragment() {
                         getCurrentTimeString(),
                         Date(),
                         System.currentTimeMillis() / 1000,
-                        0.0),
+                        0.0,
+                        "",),
                     mutableListOf(),
                 )
 
@@ -123,8 +124,6 @@ class CurrentTripFragment: Fragment() {
 
                 stopLogging()
 
-//                TODO: Add the trip to the database
-//                mainActivity.addTrip(currentTrip)
                 showNewTrip(currentTrip)
                 Intent(requireContext(), CyclingService::class.java).also {
                     it.action = CyclingService.Actions.STOP.name

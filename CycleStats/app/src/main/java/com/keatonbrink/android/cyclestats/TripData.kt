@@ -1,5 +1,6 @@
 package com.keatonbrink.android.cyclestats
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
@@ -12,5 +13,6 @@ data class TripData(
     var date: Date,
     var startTime: Long,
     var totalMiles: Double,
+    @ColumnInfo(name = "notes", defaultValue = "") var tripNotes: String,
 //    var pings: MutableList<LocationPings>,
 )
