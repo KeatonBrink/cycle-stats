@@ -1,6 +1,7 @@
 package com.keatonbrink.android.cyclestats
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -124,7 +126,8 @@ class CurrentTripFragment: Fragment() {
 
                 stopLogging()
 
-                showNewTrip(currentTrip)
+                getTripTitleAndNotesAndSubmit(currentTrip)
+
                 Intent(requireContext(), CyclingService::class.java).also {
                     it.action = CyclingService.Actions.STOP.name
                     requireContext().startService(it)
@@ -135,6 +138,33 @@ class CurrentTripFragment: Fragment() {
         binding.apply {
             
         }
+    }
+
+    private fun getTripTitleAndNotesAndSubmit(trip: TripDataWithPings){
+        // Use alert dialog to get input from user
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_trip_details, null)
+        val editTextTitle = dialogView.findViewById<EditText>(R.id.editTextTitle)
+        val editTextNotes = dialogView.findViewById<EditText>(R.id.editTextNotes)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Add Trip Details")
+            .setView(dialogView)
+            .setPositiveButton("Add") { dialog, _ ->
+                val title = editTextTitle.text.toString()
+                if (title.isNotEmpty()) {
+                    trip.tripData.title = editTextTitle.text.toString()
+                }
+                trip.tripData.tripNotes = editTextNotes.text.toString()
+                // Handle trip addition
+                showNewTrip(trip)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
     }
 
     private fun showNewTrip(trip: TripDataWithPings) {

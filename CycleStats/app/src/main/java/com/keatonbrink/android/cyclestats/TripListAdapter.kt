@@ -4,12 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.keatonbrink.android.cyclestats.databinding.ListItemTripBinding
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class TripListHolder (
@@ -20,6 +18,7 @@ class TripListHolder (
             binding.tripTitle.text = trip.tripData.title
             val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
             binding.tripDate.text = sdf.format(trip.tripData.date)
+            binding.tripStartTime.text = getTimeOfDayFromEpochSeconds(trip.tripData.startTime)
             binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
             binding.tripDistance.text = String.format("%.2f miles", trip.tripData.totalMiles)
 
@@ -46,10 +45,10 @@ class TripListHolder (
         }
     }
 
-    private fun getDateStringFromCalendar(calendar: Calendar): String {
-        val dateFormat = "MM/dd/yyyy"
-        val simpleDateFormat = SimpleDateFormat(dateFormat, Locale.US).format(calendar.time)
-        return simpleDateFormat.format(calendar.time)
+    private fun getTimeOfDayFromEpochSeconds(timeInSeconds: Long): String {
+        val date = Date(timeInSeconds * 1000L) // Convert seconds to milliseconds
+        val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
+        return sdf.format(date)
     }
 
     private fun getTimeDurationFromPings(pings: List<LocationPing>): String {
@@ -63,7 +62,16 @@ class TripListHolder (
                 maxTime = ping.time
             }
         }
-        return "${maxTime - minTime} seconds"
+        val duration = maxTime - minTime
+        if (duration < 60) {
+            return "$duration seconds"
+        }
+        if (duration < 3600) {
+            // Display the seconds always with 2 digits
+//            return "${duration / 60}m ${duration % 60} s"
+            return "${duration / 60}m ${String.format("%02d", duration % 60)}s"
+        }
+        return "${duration / 3600}h ${String.format("%02d", duration % 3600 / 60)}m"
     }
 }
 
