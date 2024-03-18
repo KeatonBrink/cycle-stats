@@ -1,6 +1,7 @@
 package com.keatonbrink.android.cyclestats
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,7 @@ class SingleTripDetailsFragment: Fragment() {
         }
 
         var totalDistance = trip!!.tripData.totalMiles
-        val avgSpeedMPH = totalDistance / (getTimeDurationFromPingsAsSeconds(trip!!.locationPings) / 3600)
+        val avgSpeedMPH = totalDistance / (getTimeDurationFromPingsAsSeconds(trip!!.locationPings).toDouble() / 3600)
 
         // Apply items to fragment
 //        1. Title
