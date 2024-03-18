@@ -13,15 +13,32 @@
         android:layout_height="match_parent"
         android:layout_margin="16dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:text="@string/trip_summary" />
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="@string/trip_summary" />
+            <ImageButton
+                android:id="@+id/edit_title"
+                android:minWidth="16sp"
+                android:minHeight="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_trip_details"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/edit_icon_description"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/start_time"
@@ -29,7 +46,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="left"
-            android:textSize="9sp"
             android:text="Start Time" />
 
         <TextView
@@ -38,7 +54,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="left"
-            android:textSize="9sp"
             android:text="Total time" />
 
         <TextView
@@ -47,7 +62,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="left"
-            android:textSize="9sp"
             android:text="Total Distance: 0.0 miles" />
 
         <TextView
@@ -56,16 +70,35 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="left"
-            android:textSize="9sp"
             android:text="Average Speed: 0.0 mph" />
 
-        <TextView
-            android:id="@+id/notes"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_gravity="left"
-            android:textSize="8sp" />
+            android:orientation="horizontal"
+            android:gravity="start">
+
+            <TextView
+                android:id="@+id/notes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:maxWidth="0dp"
+                android:ellipsize="end"
+                />
+
+            <ImageButton
+                android:id="@+id/edit_notes"
+                android:minWidth="16sp"
+                android:minHeight="16sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/edit_trip_details"
+                android:contentDescription="@string/edit_icon_description"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -37,7 +37,7 @@ class SingleTripDetailsFragment: Fragment() {
 //        4. total distance
 //        5. average speed
 //        6. notes
-        title = trip!!.tripData.title
+        title = trip!!.tripData.title + " "
         startTimeText = "Start Time: ${getTimeOfDayFromEpochSeconds(trip!!.tripData.startTime)}"
         totalTimeText = "Total Time: ${getTimeDurationFromPingsAsString(trip!!.locationPings)}"
         totalDistanceText = "Total Distance: ${String.format("%.2f", totalDistance)} miles"
