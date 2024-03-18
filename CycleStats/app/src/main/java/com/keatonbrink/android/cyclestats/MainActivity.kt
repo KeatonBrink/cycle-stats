@@ -179,4 +179,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.clear()
     }
 
+    public fun showSingleTripFragment(trip: TripDataWithPings) {
+        val gson = Gson()
+        val tripJson = gson.toJson(trip)
+        val fragment = SingleTripDetailsFragment.newInstance(tripJson)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.current_trip_fragment_container, fragment)
+            .commit()
+    }
 }

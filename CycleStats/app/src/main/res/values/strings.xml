@@ -8,6 +8,7 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="deletion_icon_description">Trashcan for trip deletion</string>
     <string name="cycle_summary">Cycle Summary</string>
+    <string name="trip_summary">Title</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
     <!-- TODO: Remove or change this placeholder text -->

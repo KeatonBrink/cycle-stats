@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.keatonbrink.android.cyclestats.databinding.ListItemTripBinding
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class TripListHolder (
@@ -19,11 +18,12 @@ class TripListHolder (
             val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.US)
             binding.tripDate.text = sdf.format(trip.tripData.date)
             binding.tripStartTime.text = getTimeOfDayFromEpochSeconds(trip.tripData.startTime)
-            binding.tripTimeDuration.text = getTimeDurationFromPings(trip.locationPings)
+            binding.tripTimeDuration.text = getTimeDurationFromPingsAsString(trip.locationPings)
             binding.tripDistance.text = String.format("%.2f miles", trip.tripData.totalMiles)
 
             binding.root.setOnClickListener {
                 Toast.makeText(binding.root.context, "Trip clicked: ${trip.tripData.title}", Toast.LENGTH_SHORT).show()
+                ((binding.root.context) as MainActivity).showSingleTripFragment(trip)
             }
 
             binding.tripDeletion.setOnClickListener {
@@ -43,35 +43,6 @@ class TripListHolder (
             }
 
         }
-    }
-
-    private fun getTimeOfDayFromEpochSeconds(timeInSeconds: Long): String {
-        val date = Date(timeInSeconds * 1000L) // Convert seconds to milliseconds
-        val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
-        return sdf.format(date)
-    }
-
-    private fun getTimeDurationFromPings(pings: List<LocationPing>): String {
-        var minTime = Long.MAX_VALUE
-        var maxTime = Long.MIN_VALUE
-        for (ping in pings) {
-            if(ping.time < minTime) {
-                minTime = ping.time
-            }
-            if(ping.time > maxTime) {
-                maxTime = ping.time
-            }
-        }
-        val duration = maxTime - minTime
-        if (duration < 60) {
-            return "$duration seconds"
-        }
-        if (duration < 3600) {
-            // Display the seconds always with 2 digits
-//            return "${duration / 60}m ${duration % 60} s"
-            return "${duration / 60}m ${String.format("%02d", duration % 60)}s"
-        }
-        return "${duration / 3600}h ${String.format("%02d", duration % 3600 / 60)}m"
     }
 }
 
