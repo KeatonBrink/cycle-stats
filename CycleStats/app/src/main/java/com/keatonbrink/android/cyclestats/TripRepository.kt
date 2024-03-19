@@ -69,6 +69,10 @@ class TripRepository private constructor(context: Context, private val coroutine
         database.tripLocationPingDao().deleteTripLocationPing(locationPing)
     }
 
+    suspend fun updateTrip(trip: TripData) {
+        database.tripDao().updateTrip(trip)
+    }
+
 
     companion object {
         private var INSTANCE: TripRepository? = null

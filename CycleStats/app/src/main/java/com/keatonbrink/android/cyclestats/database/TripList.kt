@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.keatonbrink.android.cyclestats.LocationPing
 import com.keatonbrink.android.cyclestats.TripData
 import com.keatonbrink.android.cyclestats.TripDataWithPings
@@ -29,6 +30,10 @@ interface TripDao {
 
     @Query("SELECT * FROM trip_data WHERE id=(:tripId)")
     suspend fun getTrip(tripId: Long): TripDataWithPings
+
+    // Update the title of the trip
+    @Update
+    suspend fun updateTrip(trip: TripData)
 }
 
 @Dao
