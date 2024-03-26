@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+option go_package = "https://github.com/KeatonBrink/cycle-stats/protos";
+
+package cyclestats;
+
